@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 def menu_opcoes():
     print("\n" * 100)
@@ -113,6 +112,3 @@ def alterar():
             arquivo.writelines(a)
     arquivo.close()
 menu_opcoes()
-=======
-#teste
->>>>>>> 31734f95c9d316237fef322923f8cd268e733698
