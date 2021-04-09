@@ -50,12 +50,12 @@ def listar():
 def pesquisar():
     arquivo = open('produtos.txt','r')
     a = arquivo.readlines()
-    prod = input("\nDígite produto: ")
+    prod = input("\nDígite produto: ").upper()
     for line in a:
         if prod in line:
-            posicao = (a.index(line))
-            print("\n" + a[prod].rstrip())
-            print("Resultado da pesquisa: "+prod)
+            posicao_prod = (a.index(line))
+            print("\n" + a[posicao_prod].rstrip())
+            print("Resultado da pesquisa: {}".format(a[posicao_prod].rstrip()))
             
     print("\nDeseja realizar uma nova pesquisa?") 
     cont = int(input("1 - SIM\n2 - MENU PRINCIPAL\nDigite sua escolha: "))              
@@ -101,7 +101,7 @@ def alterar():
     for line in a:
         if prod in line:
             posicao_prod = (a.index(line))
-            novo_nome = str(input("Dígite o novo nome do produto que deseja incluir: ")).upper()
+            novo_nome = str(input("Dígite o novo nome do produto que deseja incluir------------------------------------: ")).upper()
            
             a[posicao_prod] = (novo_nome)+"\n"
             arquivo.writelines(a)
