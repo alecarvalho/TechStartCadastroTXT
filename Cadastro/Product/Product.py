@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 def menu_opcoes():
     print("\n" * 100)
     while True:
@@ -24,21 +22,17 @@ def menu_opcoes():
 
 def inserir():
     #print("\n"*100)
-    #print("\n     --- INSERÇÃO DE NOVA CATEGORIA NO BANCO DE DADOS ---\n")
-    arquivo = open('categoria.txt','a+')
-    nome = str(input("Digite o nome da categoria ")).upper()
-    descricao = str(input("Digite a descrição da categoria ")).upper()
+    #print("\n     --- INSERÇÃO DE NOVO PRODUTO NO BANCO DE DADOS ---\n")
+    arquivo = open('produtos.txt','a+')
+    nome = str(input("Digite o nome do Produto: ")).upper()
 
-    arquivo.writelines("Categoria.............: ")
+    arquivo.writelines("Produto.............: ")
     arquivo.writelines(str(nome) + "\n")
-
-    arquivo.writelines("Descrição.............: ")
-    arquivo.writelines(str(descricao) + "\n")
 
     arquivo.write("\n----------------------------------------------------\n")
     arquivo.close()
-    print("\n----------------------------------------------------\n            CATEGORIA CADASTRADA COM SUCESSO!\n----------------------------------------------------\n")
-    continuar_cadastro = str(input("Deseja cadastrar outra categoria (S/N)? >>> ")).upper()
+    print("\n----------------------------------------------------\n            PRODUTO CADASTRADO COM SUCESSO!\n----------------------------------------------------\n")
+    continuar_cadastro = str(input("Desenha cadastrar outro produto (S/N)? >>> ")).upper()
     if continuar_cadastro == "S":
         inserir()
     elif continuar_cadastro == "N":
@@ -46,7 +40,7 @@ def inserir():
     
 
 def listar():
-    arquivo = open('categoria.txt','r')
+    arquivo = open('produtos.txt','r')
     a = arquivo.readlines()
     for linha in a:
         linha = linha.rstrip()
@@ -54,9 +48,9 @@ def listar():
     arquivo.close()
 
 def pesquisar():
-    arquivo = open('categoria.txt','r')
+    arquivo = open('produtos.txt','r')
     a = arquivo.readlines()
-    prod = input("\nDígite a categoria: ").upper()
+    prod = input("\nDígite produto: ").upper()
     for line in a:
         if prod in line:
             posicao_prod = (a.index(line))
@@ -73,14 +67,14 @@ def pesquisar():
         print("Valor inválido, escolha uma das duas opções disponíveis")
 
 def excluir():
-    arquivo = open('categoria.txt', 'r+')
+    arquivo = open('produtos.txt', 'r+')
     a = arquivo.readlines()
-    prod = str(input("Dígite o nome da categoria que deseja excluir do banco de dados: ")).upper()
+    prod = str(input("Dígite o nome do produto que deseja excluir do banco de dados: ")).upper()
     for line in a:
         if prod in line:
             posicao_prod = (a.index(line))
             a[posicao_prod] = ""
-            arquivo = open('categoria.txt','w')
+            arquivo = open('produtos.txt','w')
             arquivo.writelines(a)
     arquivo.close()
 
@@ -100,19 +94,16 @@ def continuar_programa():
              print("Valor inválido, digite 1 = Sim ou 2 = Não.")
 
 def alterar():
-    arquivo = open('categoria.txt','r+')
+    arquivo = open('produtos.txt','r+')
     a = arquivo.readlines()
-    prod = str(input("Dígite o nome da categoria que deseja fazer alterações: ")).upper()
-    arquivo = open('categoria.txt', 'w')
+    prod = str(input("Dígite o nome do produto que deseja fazer alterações: ")).upper()
+    arquivo = open('produtos.txt', 'w')
     for line in a:
         if prod in line:
             posicao_prod = (a.index(line))
-            novo_nome = str(input("Dígite o novo nome da categoria que deseja incluir: ")).upper()
+            novo_nome = str(input("Dígite o novo nome do produto que deseja incluir------------------------------------: ")).upper()
            
             a[posicao_prod] = (novo_nome)+"\n"
             arquivo.writelines(a)
     arquivo.close()
 menu_opcoes()
-=======
-#teste
->>>>>>> 31734f95c9d316237fef322923f8cd268e733698
