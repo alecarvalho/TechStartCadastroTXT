@@ -23,18 +23,30 @@ def menu_opcoes(cursor, connection=None):
 def inserir(cursor, connection):
     nome = str(input("Digite o nome do Produto: ")).upper()
     cursor.execute(f"INSERT INTO Product (name) VALUES ('{nome}')")
+    id_produto = cursor.lastrowid
+
+    cursor.execute('SELECT category_id, name FROM Category')
+    print(f'Selecione uma das categorias abaixo: \n {cursor.fetchall()}')
+    id_categoria = input()
+    
+    cursor.execute(f"INSERT INTO ProductCategory (product_id, category_id) VALUES ({int(id_produto)}, {int(id_categoria)})")
 
     connection.commit()
+
+    print(cursor.execute('SELECT * from ProductCategory').fetchall())
     
     continuar_cadastro = str(input("Desenha cadastrar outro produto (S/N)? >>> ")).upper()
     if continuar_cadastro == "S":
         inserir(cursor)
-    elif continuar_cadastro == "N":
-        continuar_programa()
     
 
 def listar(cursor):
-    cursor.execute("SELECT * FROM Product")
+    cursor.execute('''SELECT Product.id, Product.name, Category.name
+        FROM Product 
+        JOIN ProductCategory ON ProductCategory.product_id = Product.product_id 
+        JOIN Category ON Category.category_id = ProductCategory.category_id'''
+    )
+
     print(cursor.fetchall())
 
 def pesquisar(cursor):
@@ -54,7 +66,7 @@ def pesquisar(cursor):
 ################
 def excluir(cursor, connection):
     prod = str(input("Dígite o código (id) do produto que deseja excluir do banco de dados: "))
-    
+
     cursor.execute(f"DELETE FROM Product WHERE product_id='{prod}'")
     connection.commit()
     print('PRODUTO EXCLUIDO COM SUCESSO')
@@ -89,17 +101,17 @@ def alterar(cursor, connection):
     # arquivo.close()
 
 
-def continuar_programa():
-    while True:
-        print("\n>>> Dígite 1 para ir para o menu principal.")
-        print(">>> Dígite 2 para sair do Banco de dados.")
-        continuar = int(input("Dígite sua opção: "))
-        if continuar == 1:
-            print("\n"*100)
-            menu_opcoes()
-        elif continuar == 2:
-            print("\n"*100)
-            print("\n\n>>>>>>> VOCÊ SAIU DO BANCO DE DADOS! <<<<<<<")
-            break
-        else:
-            print("Valor inválido, digite 1 = Sim ou 2 = Não.")
+# def continuar_programa():
+#     while True:
+#         print("\n>>> Dígite 1 para ir para o menu principal.")
+#         print(">>> Dígite 2 para sair do Banco de dados.")
+#         continuar = int(input("Dígite sua opção: "))
+#         if continuar == 1:
+#             print("\n"*100)
+#             menu_opcoes()
+#         elif continuar == 2:
+#             print("\n"*100)
+#             print("\n\n>>>>>>> VOCÊ SAIU DO BANCO DE DADOS! <<<<<<<")
+#             break
+#         else:
+#             print("Valor inválido, digite 1 = Sim ou 2 = Não.")

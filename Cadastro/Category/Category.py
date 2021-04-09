@@ -1,5 +1,5 @@
 
-def menu_opcoes(cursor, connection):
+def menu_opcoes(cursor, connection=None):
     print("\n" * 100)
     while True:
         print("\n      OPÇÕES DISPONÍVEIS NO BD:\n          1 - INSERIR\n          2 - PESQUISAR\n          3 - ALTERAR\n          4 - EXCLUIR\n          5 - LISTAR\n          6 - SAIR\n")
@@ -45,9 +45,6 @@ def inserir(cursor, connection):
     continuar_cadastro = str(input("Deseja cadastrar outra categoria (S/N)? >>> ")).upper()
     if continuar_cadastro == "S":
         inserir(cursor, connection)
-    elif continuar_cadastro == "N":
-        continuar_programa()
-    
 
 def listar(cursor):
     # arquivo = open('categoria.txt','r')
@@ -57,7 +54,11 @@ def listar(cursor):
     #     print(linha)
     # arquivo.close()
 
-    cursor.execute('SELECT * FROM Category')
+    cursor.execute('''SELECT Category.category_id, Category.name, Category.description, Product.name
+        FROM Category 
+        JOIN ProductCategory ON ProductCategory.category_id = Category.category_id 
+        JOIN Product ON Product.product_id = ProductCategory.product_id'''
+    )
     print(cursor.fetchall())
 
 def pesquisar(cursor):
@@ -77,7 +78,7 @@ def pesquisar(cursor):
     if cont == 1:
         pesquisar()
     elif cont == 2:
-        menu_opcoes()
+        menu_opcoes(cursor)
     else:
         print("Valor inválido, escolha uma das duas opções disponíveis")
 
@@ -95,20 +96,20 @@ def excluir(cursor, connection):
     #         arquivo.writelines(a)
     # arquivo.close()
 
-def continuar_programa():
-    while True:
-        print("\n>>> Dígite 1 para ir para o menu principal.")
-        print(">>> Dígite 2 para sair do Banco de dados.")
-        continuar = int(input("Dígite sua opção: "))
-        if continuar == 1:
-            print("\n"*100)
-            menu_opcoes()
-        elif continuar == 2:
-            print("\n"*100)
-            print("\n\n>>>>>>> VOCÊ SAIU DO BANCO DE DADOS! <<<<<<<")
-            break
-        else:
-             print("Valor inválido, digite 1 = Sim ou 2 = Não.")
+# def continuar_programa():
+#     while True:
+#         print("\n>>> Dígite 1 para ir para o menu principal.")
+#         print(">>> Dígite 2 para sair do Banco de dados.")
+#         continuar = int(input("Dígite sua opção: "))
+#         if continuar == 1:
+#             print("\n"*100)
+#             menu_opcoes()
+#         elif continuar == 2:
+#             print("\n"*100)
+#             print("\n\n>>>>>>> VOCÊ SAIU DO BANCO DE DADOS! <<<<<<<")
+#             break
+#         else:
+#              print("Valor inválido, digite 1 = Sim ou 2 = Não.")
 
 def alterar(cursor, connection):
     # arquivo = open('categoria.txt','r+')
