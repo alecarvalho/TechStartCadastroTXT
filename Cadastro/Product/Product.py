@@ -40,7 +40,7 @@ def listar(cursor):
 def pesquisar(cursor):
     prod = input("\nDígite produto: ").upper()
     cursor.execute(f"SELECT * FROM Product WHERE name='{prod}'")
-    print(cursor.fetchone())
+    print(cursor.fetchall())
 
     print("\nDeseja realizar uma nova pesquisa?") 
     cont = int(input("1 - SIM\n2 - MENU PRINCIPAL\nDigite sua escolha: "))               

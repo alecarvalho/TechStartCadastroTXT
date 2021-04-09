@@ -1,19 +1,19 @@
 
-def menu_opcoes():
+def menu_opcoes(cursor, connection):
     print("\n" * 100)
     while True:
         print("\n      OPÇÕES DISPONÍVEIS NO BD:\n          1 - INSERIR\n          2 - PESQUISAR\n          3 - ALTERAR\n          4 - EXCLUIR\n          5 - LISTAR\n          6 - SAIR\n")
         opcao = int(input("DÍGITE SUA OPÇÃO > "))
         if opcao == 1:
-            inserir()
+            inserir(cursor, connection)
         elif opcao == 2:
-            pesquisar()
+            pesquisar(cursor)
         elif opcao == 3:
-            alterar()
+            alterar(cursor, connection)
         elif opcao == 4:
-            excluir()
+            excluir(cursor, connection)
         elif opcao == 5:
-            listar()
+            listar(cursor)
         elif opcao == 6:
             print("\n" * 100)
             print("\n\n>>>>>>> VOCÊ SAIU DO BANCO DE DADOS! <<<<<<<")
@@ -21,46 +21,56 @@ def menu_opcoes():
             print("\nOpção inválida, escolhas uma das 6 opções disponíveis para continuar!\n")
 
 
-def inserir():
+def inserir(cursor, connection):
     #print("\n"*100)
     #print("\n     --- INSERÇÃO DE NOVA CATEGORIA NO BANCO DE DADOS ---\n")
-    arquivo = open('categoria.txt','a+')
-    nome = str(input("Digite o nome da categoria ")).upper()
-    descricao = str(input("Digite a descrição da categoria ")).upper()
+    #arquivo = open('categoria.txt','a+')
+    nome = str(input("Digite o nome da categoria "))
+    descricao = str(input("Digite a descrição da categoria "))
 
-    arquivo.writelines("Categoria.............: ")
-    arquivo.writelines(str(nome) + "\n")
+    cursor.execute(f'INSERT INTO Category (name, description) VALUES ("{nome}", "{descricao}")')
+    connection.commit()
+    
 
-    arquivo.writelines("Descrição.............: ")
-    arquivo.writelines(str(descricao) + "\n")
+    # arquivo.writelines(str(nome) + "\n")
+    # arquivo.writelines("Categoria.............: ")
 
-    arquivo.write("\n----------------------------------------------------\n")
-    arquivo.close()
-    print("\n----------------------------------------------------\n            CATEGORIA CADASTRADA COM SUCESSO!\n----------------------------------------------------\n")
+    # arquivo.writelines("Descrição.............: ")
+    # arquivo.writelines(str(descricao) + "\n")
+
+    # arquivo.write("\n----------------------------------------------------\n")
+    # arquivo.close()
+
+    print('CATEGORIA CADASTRADA COM SUCESSO!')
     continuar_cadastro = str(input("Deseja cadastrar outra categoria (S/N)? >>> ")).upper()
     if continuar_cadastro == "S":
-        inserir()
+        inserir(cursor, connection)
     elif continuar_cadastro == "N":
         continuar_programa()
     
 
-def listar():
-    arquivo = open('categoria.txt','r')
-    a = arquivo.readlines()
-    for linha in a:
-        linha = linha.rstrip()
-        print(linha)
-    arquivo.close()
+def listar(cursor):
+    # arquivo = open('categoria.txt','r')
+    # a = arquivo.readlines()
+    # for linha in a:
+    #     linha = linha.rstrip()
+    #     print(linha)
+    # arquivo.close()
 
-def pesquisar():
-    arquivo = open('categoria.txt','r')
-    a = arquivo.readlines()
-    prod = input("\nDígite a categoria: ").upper()
-    for line in a:
-        if prod in line:
-            posicao_prod = (a.index(line))
-            print("\n" + a[posicao_prod].rstrip())
-            print("Resultado da pesquisa: {}".format(a[posicao_prod].rstrip()))
+    cursor.execute('SELECT * FROM Category')
+    print(cursor.fetchall())
+
+def pesquisar(cursor):
+    # arquivo = open('categoria.txt','r')
+    # a = arquivo.readlines()
+    prod = input("Dígite a categoria: ")
+    cursor.execute(f'SELECT * FROM Category WHERE name = "{prod}"')
+    print(cursor.fetchall())
+    # for line in a:
+    #     if prod in line:
+    #         posicao_prod = (a.index(line))
+    #         print("\n" + a[posicao_prod].rstrip())
+    #         print("Resultado da pesquisa: {}".format(a[posicao_prod].rstrip()))
             
     print("\nDeseja realizar uma nova pesquisa?") 
     cont = int(input("1 - SIM\n2 - MENU PRINCIPAL\nDigite sua escolha: "))              
@@ -71,17 +81,19 @@ def pesquisar():
     else:
         print("Valor inválido, escolha uma das duas opções disponíveis")
 
-def excluir():
-    arquivo = open('categoria.txt', 'r+')
-    a = arquivo.readlines()
-    prod = str(input("Dígite o nome da categoria que deseja excluir do banco de dados: ")).upper()
-    for line in a:
-        if prod in line:
-            posicao_prod = (a.index(line))
-            a[posicao_prod] = ""
-            arquivo = open('categoria.txt','w')
-            arquivo.writelines(a)
-    arquivo.close()
+def excluir(cursor, connection):
+    # arquivo = open('categoria.txt', 'r+')
+    # a = arquivo.readlines()
+    prod = str(input("Dígite o nome da código (id) que deseja excluir do banco de dados: "))
+    cursor.execute(f'DELETE FROM Category WHERE category_id = "{prod}"')
+    connection.commit()
+    # for line in a:
+    #     if prod in line:
+    #         posicao_prod = (a.index(line))
+    #         a[posicao_prod] = ""
+    #         arquivo = open('categoria.txt','w')
+    #         arquivo.writelines(a)
+    # arquivo.close()
 
 def continuar_programa():
     while True:
@@ -98,16 +110,21 @@ def continuar_programa():
         else:
              print("Valor inválido, digite 1 = Sim ou 2 = Não.")
 
-def alterar():
-    arquivo = open('categoria.txt','r+')
-    a = arquivo.readlines()
-    prod = str(input("Dígite o nome da categoria que deseja fazer alterações: ")).upper()
-    arquivo = open('categoria.txt', 'w')
-    for line in a:
-        if prod in line:
-            posicao_prod = (a.index(line))
-            novo_nome = str(input("Dígite o novo nome da categoria que deseja incluir: ")).upper()
+def alterar(cursor, connection):
+    # arquivo = open('categoria.txt','r+')
+    # a = arquivo.readlines()
+    prod = str(input("Dígite o nome da categoria que deseja fazer alterações: "))
+    novo_nome = str(input("Dígite o novo nome da categoria que deseja incluir: "))
+    cursor.execute(f'UPDATE Category SET name = "{novo_nome}" WHERE category_id "{prod}"')
+    connection.commit()
+    print('CATEGORIA ALTERADA COM SUCESSO')
+
+
+    # arquivo = open('categoria.txt', 'w')
+    # for line in a:
+    #     if prod in line:
+    #         posicao_prod = (a.index(line))
            
-            a[posicao_prod] = (novo_nome)+"\n"
-            arquivo.writelines(a)
-    arquivo.close()
+    #         a[posicao_prod] = (novo_nome)+"\n"
+    #         arquivo.writelines(a)
+    # arquivo.close()

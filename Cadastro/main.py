@@ -33,7 +33,7 @@ def main():
     if choice == 'p':
         product_options(cur, con)
     elif choice == 'c':
-        category_options()
+        category_options(cur, con)
     else:
         print('Por favor seleciona uma das opções (produtos ou categorias)')
         main()
