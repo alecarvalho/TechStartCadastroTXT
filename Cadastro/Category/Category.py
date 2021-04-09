@@ -111,4 +111,3 @@ def alterar():
             a[posicao_prod] = (novo_nome)+"\n"
             arquivo.writelines(a)
     arquivo.close()
-menu_opcoes()
